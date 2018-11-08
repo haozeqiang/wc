@@ -13,7 +13,7 @@
                         <div class="country" @click="isshow">中国大陆</div>
                         <ul v-show="qh" @click="hidden">
                             <li @click="zgdl">中国大陆</li>
-                            <li@click="zgxg">中国香港</li>
+                            <li @click="zgxg">中国香港</li>
                         </ul>
                     </div>
                     <div class="user_phone_wrap">
@@ -38,6 +38,19 @@
         </div>
 
         <Footer></Footer>
+        <div class="errMsg" v-show="alert">
+            <div class="alert-err">
+                <div class="position">
+                    <i class="close" @click="closeErr">
+                        <img src="@/assets/login/closeItems.png" alt=""/>
+                    </i>
+                    <i class="icon_error">
+                        <img src="@/assets/login/icon_error.png"/>
+                    </i>
+                    <p class="error_message">{{errMessage}}</p>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -49,19 +62,50 @@ import Footer from '../components/footer.vue'
 import Logo from '../components/logo.vue'
     export default{
         data(){
-            return {phone:'',upwd:'',qh:false,sjh:'+86'}
+                return {phone:'',
+                upwd:'',
+                qh:false,
+                sjh:'+86',
+                errMessage:'',
+                alert:false,
+            }
         },
         components:{
             Footer,topHeader,Logo
         },
         methods:{
             login(){
-                console.log(11)
-                var phone=this.phone,upwd=this.upwd;
-                this.axios.post('http://localhost:3000/user/login',Qs.stringify({phone,upwd})).then(res=>{
-                    console.log(res.data);
-                    if(res.data.code==1);
-                })
+                let phone=this.phone,upwd=this.upwd;
+                    this.testPhone();
+                    if(this.errMessage===''){
+                        if(this.upwd===""){
+                            this.errMessage='请填写密码';
+                            this.alert=true;
+                        }else{
+                            this.axios.post('http://localhost:3000/user/login',Qs.stringify({phone,upwd})).then(res=>{
+                                console.log(res.data);
+                                if(res.data.code==1){
+                                    alert('登录成功')
+                                }else{
+                                    this.alert=true;
+                                    this.errMessage=res.data.msg;
+                                }
+                        })
+                    }
+                 };
+            },
+            testPhone(){
+                if(this.phone===""){
+                    this.errMessage='请填写手机号码';
+                    this.alert=true;
+                }else if(/^1[3456789]\d{9}$/ig.test(this.phone)||/^(5|6|8|9)\\d{7}$/ig.test(this.phone))
+                    {
+                        this.errMessage='';
+                        this.alert=false;
+                    }else if(!/^1[3456789]\d{9}$/ig.test(this.phone)&&!/^(5|6|8|9)\\d{7}$/ig.test(this.phone)){
+                        this.alert=true;
+                        this.errMessage='您输入的手机号码有误'
+                    }
             },
             isshow(){
                 this.qh=true;
@@ -71,9 +115,14 @@ import Logo from '../components/logo.vue'
             },
             zgdl(){
                 this.sjh='+86';
+                 console.log(this.sjh)
             },
             zgxg(){
                 this.sjh='+852';
+                console.log(this.sjh)
+            },
+            closeErr(){
+                this.alert=false;
             }
         },
         mounted(){
@@ -163,7 +212,7 @@ import Logo from '../components/logo.vue'
     float: left;
     font-size: 14px;
     color: #9e9e9e;
-    margin-right: 38px;
+    margin-right: 35px;
 }
 .content .content-form .other span{
     float: left;
@@ -236,6 +285,57 @@ import Logo from '../components/logo.vue'
 .content .content-form form .drop_list_wrap ul li:hover{
     background-color: #ff4f53;
     color: #fff;
+}
+
+.alert-err{
+    position: absolute;
+    top: 40%;
+    left: 50%;
+}
+.position {
+    position: relative;
+    margin-left: -50%;
+    margin-right: 50%;
+    background-color: #fff;
+    padding: 10px 40px;
+    border: 1px solid #ddd;
+}
+.close {
+    position: absolute;
+    right: 10px;
+    display: block;
+    width: 16px;
+    height: 16px;
+}
+.close img {
+    width: 16px;
+    height: 16px;
+}
+.icon_error {
+    display: block;
+    width: 50px;
+    height: 50px;
+    margin: 30px auto 25px;
+}
+.icon_error img {
+    width: 50px;
+    height: 50px;
+}
+.error_message {
+    font-size: 16px;
+    color: #626161;
+    text-align: center;
+    margin-bottom: 33px;
+}
+.errMsg{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    /*filter: progid:DXImageTransform.Microsoft.gradient(enabled=true,startColorstr=#33000000,endColorstr=#33000000);*/
+    z-index: 1050;
 }
 </style>
 

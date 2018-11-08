@@ -12,13 +12,13 @@
                     <div class="drop_list_wrap">
                         <div class="country" @click="isshow">中国大陆</div>
                         <ul v-show="qh" @click="hidden">
-                            <li>中国大陆</li>
-                            <li>中国香港</li>
+                            <li @click="changeCH">中国大陆</li>
+                            <li @click="changeHK">中国香港</li>
                         </ul>
                     </div>
                     <div class="user_phone_wrap">
-                        <span>+86</span>
-                        <input type="text" placeholder="请填写手机号码" />
+                        <span>{{phoneCity}}</span>
+                        <input type="text" placeholder="请填写手机号码" v-model="phone"/>
                     </div>
                     <div class="short_message">
                         <input class="input_all input_text" type="text" placeholder="请填写图形验证码" />
@@ -30,11 +30,11 @@
                         <router-link class="input_all btn_ver ladda-button" to="#"><span class="count-down"></span>获取短信验证码</router-link>
                     </div>
 
-                    <input class="upwd" type="password" placeholder="设置密码"/>
-                    <input class="align-upwd" type="password" placeholder="确认密码" />
-                    <input class="user-login" type="submit" value="立即注册"/>
+                    <input class="upwd" type="password" placeholder="设置密码" v-model="upwd"/>
+                    <input class="align-upwd" type="password" placeholder="确认密码" v-model="upwdAgain"/>
+                    <input class="user-login" type="button" value="立即注册" @click="register"/>
                     <div class="other">
-                        <input type="checkbox" />
+                        <input type="checkbox" v-model="isChecked" @click="checked"/>
                         <span class="remember-me">接受Wconcept隐私条款</span>
                         <span class="forget-password">
                             <router-link to ="/login">去登陆</router-link>
@@ -44,7 +44,19 @@
             </div>
         </div>
 
-        
+        <div class="errMsg" v-show="alert">
+            <div class="alert-err">
+                <div class="position">
+                    <i class="close" @click="closeErr">
+                        <img src="@/assets/login/closeItems.png" alt=""/>
+                    </i>
+                    <i class="icon_error">
+                        <img src="@/assets/login/icon_error.png"/>
+                    </i>
+                    <p class="error_message">{{errMessage}}</p>
+                </div>
+            </div>
+        </div>
         <Footer></Footer>
     </div>
 </template>
@@ -58,7 +70,16 @@ import Footer from '../components/footer.vue'
 
     export default {
         data(){
-            return {qh:false}
+            return {
+                qh:false,
+                isChecked:false,
+                alert:false,
+                errMessage:'',
+                phoneCity:'+86',
+                phone:'',
+                upwd:'',
+                upwdAgain:'',
+            }
         },
         components:{
             topHeader,Logo,Footer
@@ -69,7 +90,64 @@ import Footer from '../components/footer.vue'
             },
             hidden(){
                 this.qh=false;
-            }
+            },
+            register(){
+                
+            },
+            closeErr(){
+                this.alert=false;
+            },
+            checked(){
+                isChecked:true;
+            },
+            changeCH(){
+                this.phoneCity='+86'
+            },
+            changeHK(){
+                this.phoneCity='+852'
+            },
+            register(){
+                alert('aaaaa');
+                let phone=this.phone,upwd=this.upwd;
+                if(this.isChecked===false){
+                    this.errMessage='请接受服务条款';
+                    this.alert=true;
+                }else if(this.phone===''){
+                    this.errMessage='手机号未填写';
+                    this.alert=true;
+                }else if(!/^1[3456789]\d{9}$/ig.test(this.phone)&&!/^(5|6|8|9)\\d{7}$/ig.test(this.phone)){
+                    this.errMessage='您输入的手机号码有误';
+                    this.alert=true;
+                }else if(/^1[3456789]\d{9}$/ig.test(this.phone)||/^(5|6|8|9)\\d{7}$/ig.test(this.phone)){
+                        this.errMessage='';
+                        this.alert=false;
+                        if(this.upwd===''){
+                        this.errMessage='密码未填写';
+                        this.alert=true;
+                    }else if(this.upwd!==this.upwdAgain){
+                        this.errMessage='密码与确认密码不一致，请重新输入';
+                        this.alert=true;
+                    }else{
+                    this.axios.post('http://localhost:3000/user/checkPhone',Qs.stringify({phone})).then(res=>{
+                            console.log(res.data);
+                            if(res.data.code!==1){
+                                this.errMessage='该手机号已注册';
+                                this.alert=true;
+                            }else{
+                                this.axios.post('http://localhost:3000/user/register',Qs.stringify({phone,upwd})).then(res=>{
+                                console.log(res.data);
+                                if(res.data.code===1){
+                                    alert(666666666)
+                                }else{
+                                    this.errMessage=res.data.msg;
+                                    this.alert=true;
+                            }
+                        })
+                            }
+                        })
+                    }
+                }
+            },
         },
         mounted(){
             this.isshow();
@@ -267,6 +345,56 @@ import Footer from '../components/footer.vue'
 .content .content-form form .drop_list_wrap ul li:hover{
     background-color: #ff4f53;
     color: #fff;
+}
+.alert-err{
+    position: absolute;
+    top: 40%;
+    left: 50%;
+}
+.position {
+    position: relative;
+    margin-left: -50%;
+    margin-right: 50%;
+    background-color: #fff;
+    padding: 10px 40px;
+    border: 1px solid #ddd;
+}
+.close {
+    position: absolute;
+    right: 10px;
+    display: block;
+    width: 16px;
+    height: 16px;
+}
+.close img {
+    width: 16px;
+    height: 16px;
+}
+.icon_error {
+    display: block;
+    width: 50px;
+    height: 50px;
+    margin: 30px auto 25px;
+}
+.icon_error img {
+    width: 50px;
+    height: 50px;
+}
+.error_message {
+    font-size: 16px;
+    color: #626161;
+    text-align: center;
+    margin-bottom: 33px;
+}
+.errMsg{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    /*filter: progid:DXImageTransform.Microsoft.gradient(enabled=true,startColorstr=#33000000,endColorstr=#33000000);*/
+    z-index: 1050;
 }
 </style>
 
