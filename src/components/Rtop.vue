@@ -1,5 +1,5 @@
 <template>
-    <div class="go-top">
+    <div class="go-top" v-show="ScrollTop">
         <div class="t-top">
             <router-link to="#">
                 <div>购物车</div>
@@ -7,17 +7,46 @@
             </router-link>
         </div>
         <div class="tj">
-            <router-link to="">
+            <a href="#" @click.stop.prevent="goTop">
                 <i>top</i>
-            </router-link>
+            </a>
         </div>
     </div>
 </template>
 <script>
 export default {
     data(){
-        return {}
-    }
+        return {
+            ScrollTop:false,
+        }
+    },
+    mounted() {
+        window.addEventListener('scroll', this.handleScroll)
+    },
+    methods:{
+        handleScroll () {
+        let toTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+        //console.log(toTop)
+        if(toTop>='1000'){
+            this.ScrollTop=true;
+        }else{
+            this.ScrollTop=false;
+        }
+        },
+        goTop(){
+            let back = setInterval(() => {
+            if(document.body.scrollTop||document.documentElement.scrollTop){
+                document.body.scrollTop-=100;
+                document.documentElement.scrollTop-=100;
+            }else {
+                clearInterval(back)
+                }
+            },7);
+        }
+    },
+    destroyed () {
+        window.removeEventListener('scroll', this.handleScroll)
+    },
 }
 </script>
 <style scoped>

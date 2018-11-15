@@ -22,7 +22,7 @@
                     </div>
                     <div class="short_message">
                         <input class="input_all input_text" type="text" placeholder="请填写图形验证码" />
-                        <router-link to="#"><img src="https://www.wconcept.cn/customer/validate/initimg/?time=1541172889754" alt="" /></router-link>
+                        <router-link to="#"><img src="" alt="" /></router-link>
                     </div>
                     <div class="short_message">
                         <input class="input_all input_text" type="text" placeholder="短信验证码" />
@@ -137,7 +137,7 @@ import Footer from '../components/footer.vue'
                                 this.axios.post('http://localhost:3000/user/register',Qs.stringify({phone,upwd})).then(res=>{
                                 console.log(res.data);
                                 if(res.data.code===1){
-                                    alert(666666666)
+                                    alert('恭喜您！注册成功')
                                 }else{
                                     this.errMessage=res.data.msg;
                                     this.alert=true;

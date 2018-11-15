@@ -3,8 +3,8 @@
         <div class="top-area">
             <div class="left">
                 <span>
-                    <router-link to="/register">注册</router-link>
-                    <router-link to="/login">登录</router-link>
+                    <router-link :to='isreg' ref='reg'>注册</router-link>
+                    <router-link :to='islogin' ref='login'>登录</router-link>
                 </span>
                 <router-link to="">下载APP
                     <img src="@/assets/header/down_app.png" class="psa">
@@ -29,7 +29,20 @@
 <script>
     export default{
         data(){
-            return {}
+            return {
+                isreg:'',
+                islogin:'',
+            }
+        },
+        created(){
+            //console.log(sessionStorage.uid)
+            if(sessionStorage.uid == undefined){
+                console.log(this.$refs.reg.innerText);
+                //=`欢迎${sessionStorage.uid}`
+            }else{
+                this.isreg="/register"
+                this.islogin="/login"
+            }
         }
     }
 </script>
@@ -70,6 +83,10 @@
     padding: 10px;
     background: #fff;
     border: 1px solid #eee;
+}
+.top-area a,.top-area span{
+    display:inline-block;
+    line-height:34px;
 }
 .top-area .left a:last-child:hover img{
     display:block;
@@ -127,13 +144,16 @@
     display: block;
     background-position:0 9px;
 }
-.top-area .right .placeholder ul .icon-my:hover~li{
+.top-area .right .placeholder ul:hover li{
     display:block;
 }
-.top-area .right .placeholder ul .icon-my a{
+.top-area .right .placeholder ul li a{
     background: url('../assets/header/pCenter_qian.png') no-repeat left center;
     background-size: 7px 4px;
-    background-position: 54px 7px;
+    background-position: 54px 15px;
     padding-right: 18px;
 }   
+a:hover {
+    color: #2d2d2d;
+}
 </style>

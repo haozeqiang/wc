@@ -13,10 +13,15 @@ import Register from './views/register.vue'
 import Index from './views/index.vue'
 
 
+//测试专用引入
+import details from './views/details.vue'
+import bb from './components/tipsLogin.vue'
+import cart from './views/cart.vue'
+
+
 
 //引入轮播图
 import banner from './components/banner.vue'
-//import cc from './components/ccl.vue'
 
 
 
@@ -52,11 +57,21 @@ export default new Router({
       name: 'index',
       component: Index
     },
-    /*{
-      path: '/',
-      name: 'home',
-      component: Home
+    {
+      path: '/details',
+      name: 'details',
+      component: details
     },
+    {
+      path: '/bb',
+      name: 'bb',
+      component: bb
+    },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: cart
+    },/*
     {
       path: '/about',
       name: 'about',

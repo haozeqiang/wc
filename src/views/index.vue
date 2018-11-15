@@ -153,7 +153,7 @@
                 <h2>热销商品</h2>
             </div>
             <div class="hot-info">
-                <router-link to="#" class="hotinfo-item" v-for="item in list5" :key="item.nid">
+                <router-link v-for="item in list5" :key="item.nid" :to="'/details?nid='+item.nid" class="hotinfo-item">
                     <span class="image">
                         <span class="image_ab">
                             <img :src="item.pic" alt=""/>
@@ -181,6 +181,78 @@
         <Footer></Footer>
     </div>
 </template>
+
+<script>
+//引入网页底部内容
+import Footer from '../components/footer.vue'
+//引入网页底部内容
+import Header from '../components/header.vue'
+//引入轮播图
+
+import Banner from '../components/banner.vue'
+// import func from './vue-temp/vue-editor-bridge';
+
+
+export default {
+    data(){
+        return {banner:[],list1:{arry:[]},rmpl:['大衣','夹克','裙装','针织','卫衣','裤装','靴子','单肩包','帽子','时装鞋','耳环/耳钉','休闲鞋'],
+        hoverIndex: 0,
+        list2:{arry2:[]},
+        list3:{arry3:[]},
+        list4:{arry4:[]},
+        ad:[],
+        list5:{arry5:[]},
+        xp:'',
+        sid:this.$route.query.sid,
+        }
+    },
+    components:{
+        Header,Footer,Banner
+    },
+
+    methods:{
+        getshop(){
+
+        },
+        init(){
+            this.axios.get('http://localhost:3000/products/indexpro').then(res=>{
+            //console.log(res.data);
+            let dataList = res.data.slice(0,48);
+            this.list3 = res.data.slice(50,56);
+            this.list2=res.data.slice(48,50);
+            this.list4 = res.data.slice(56,60);
+            this.list5 = res.data.slice(68,);
+            this.xp=res.data.slice(0,4);
+            let arry = [];
+            let arry3 = [];
+            function del(){
+                for(let n=12; n <dataList.length-1;n--){
+                    arry.push(dataList.splice(0,4))
+                }
+            }
+            del();
+            this.list1 = {arry};
+            /*banner下面小图数据*/ 
+
+
+        });
+        },
+        /*获取爱豆原款的数据*/
+        getadinfo(){
+            this.axios.get('http://localhost:3000/products/adinfo').then(res=>{
+                this.ad=res.data;
+            })
+        }
+    },
+    mounted() {
+        this.init();
+        this.getadinfo();
+    },
+    created() {
+        //console.log(this.$route)
+    },
+}
+</script>
 <style scoped>
 .pro-section{
     background-image: url(../assets/index/account_init.png);
@@ -807,73 +879,7 @@
 
 </style>
 
-<script>
-//引入网页底部内容
-import Footer from '../components/footer.vue'
-//引入网页底部内容
-import Header from '../components/header.vue'
-//引入轮播图
 
-import Banner from '../components/banner.vue'
-// import func from './vue-temp/vue-editor-bridge';
-
-
-export default {
-    data(){
-        return {banner:[],list1:{arry:[]},rmpl:['大衣','夹克','裙装','针织','卫衣','裤装','靴子','单肩包','帽子','时装鞋','耳环/耳钉','休闲鞋'],
-        hoverIndex: 0,
-        list2:{arry2:[]},
-        list3:{arry3:[]},
-        list4:{arry4:[]},
-        ad:[],
-        list5:{arry5:[]},
-        xp:'',
-        }
-    },
-    components:{
-        Header,Footer,Banner
-    },
-
-    methods:{
-        getshop(){
-
-        },
-        init(){
-            this.axios.get('http://localhost:3000/products/indexpro').then(res=>{
-            //console.log(res.data);
-            let dataList = res.data.slice(0,48);
-            this.list3 = res.data.slice(50,56);
-            this.list2=res.data.slice(48,50);
-            this.list4 = res.data.slice(56,60);
-            this.list5 = res.data.slice(68,);
-            this.xp=res.data.slice(0,4);
-            let arry = [];
-            let arry3 = [];
-            function del(){
-                for(let n=12; n <dataList.length-1;n--){
-                    arry.push(dataList.splice(0,4))
-                }
-            }
-            del();
-            this.list1 = {arry};
-            /*banner下面小图数据*/ 
-
-
-        });
-        },
-        /*获取爱豆原款的数据*/
-        getadinfo(){
-            this.axios.get('http://localhost:3000/products/adinfo').then(res=>{
-                this.ad=res.data;
-            })
-        }
-    },
-    mounted() {
-        this.init();
-        this.getadinfo();
-    },
-}
-</script>
 
 
 

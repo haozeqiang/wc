@@ -20,8 +20,8 @@
                         <span>{{sjh}}</span>
                         <input type="text" placeholder="请填写手机号码" v-model="phone"/>
                     </div>
-                    <input class="upwd" type="password" placeholder="登录密码" v-model="upwd"/>
-                    <input class="user-login" type="button" value="登录" @click="login"/>
+                    <input class="upwd" type="password" placeholder="登录密码" v-model="upwd" @keyup.enter="login"/>
+                    <input class="user-login" type="button" value="登录" @click.stop.prevent="login" />
                     <div class="other">
                         <input type="checkbox" />
                         <span class="remember-me">7天内免登录</span>
@@ -62,12 +62,14 @@ import Footer from '../components/footer.vue'
 import Logo from '../components/logo.vue'
     export default{
         data(){
-                return {phone:'',
-                upwd:'',
-                qh:false,
-                sjh:'+86',
-                errMessage:'',
-                alert:false,
+                return {
+                    phone:'',
+                    upwd:'',
+                    qh:false,
+                    sjh:'+86',
+                    errMessage:'',
+                    alert:false,
+                    sid:110,
             }
         },
         components:{
@@ -85,7 +87,9 @@ import Logo from '../components/logo.vue'
                             this.axios.post('http://localhost:3000/user/login',Qs.stringify({phone,upwd})).then(res=>{
                                 console.log(res.data);
                                 if(res.data.code==1){
-                                    alert('登录成功')
+                                    //console.log(res.data.uname);
+                                    sessionStorage.setItem('uid',res.data.uid);
+                                    this.$router.push('index?id='+this.sid)
                                 }else{
                                     this.alert=true;
                                     this.errMessage=res.data.msg;
@@ -128,7 +132,10 @@ import Logo from '../components/logo.vue'
         mounted(){
             this.isshow();
             this.hidden();
-        }
+        },
+        created() {
+            console.log(sessionStorage.uid)
+        },
     }
 </script>
 <style>

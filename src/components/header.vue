@@ -1,6 +1,6 @@
 <template>
     <div class="header-top">
-        <topHeader></topHeader>
+        <topHeader v-show="istopHeader"></topHeader>
         <div class="header">
             <div class="leftArea">
                 <router-link to="#"><img src="@/assets/header/homelogo.png"></router-link>
@@ -260,7 +260,7 @@ a:hover{
 }
 .header-top{
     width:100%;
-    height:33px;
+    *height:33px;
     line-height: 33px;
     *border-bottom: 1px solid #d9d9d9;
     box-sizing: border-box;
@@ -690,7 +690,8 @@ import topHeader from './topHeader.vue'
                 info4:'',
                 info5:'',
                 info6:'',
-                item:''
+                item:'',
+                istopHeader:true,
             }
         },
         components:{
