@@ -3,8 +3,8 @@
         <div class="top-area">
             <div class="left">
                 <span>
-                    <router-link :to='isreg' ref='reg'>注册</router-link>
-                    <router-link :to='islogin' ref='login'>登录</router-link>
+                    <router-link :to='isreg'>{{reg}}</router-link>
+                    <router-link :to='islogin'>{{login}}</router-link>
                 </span>
                 <router-link to="">下载APP
                     <img src="@/assets/header/down_app.png" class="psa">
@@ -32,16 +32,21 @@
             return {
                 isreg:'',
                 islogin:'',
+                reg:'',
+                login:'',
             }
         },
         created(){
             //console.log(sessionStorage.uid)
             if(sessionStorage.uid == undefined){
-                console.log(this.$refs.reg.innerText);
-                //=`欢迎${sessionStorage.uid}`
-            }else{
+                this.reg='注册';
+                this.login='登录'
                 this.isreg="/register"
                 this.islogin="/login"
+            }else{
+                this.reg=`你好，${sessionStorage.phone}`;
+                this.login='退出'
+                /*将来设置个人中心和注销的借口*/
             }
         }
     }

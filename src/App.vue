@@ -21,6 +21,7 @@
     a,a:link{
       color: #2d2d2d;
       text-decoration:none;
+      cursor: pointer;
     }
     ul,li{
       margin:0;

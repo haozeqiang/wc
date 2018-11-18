@@ -89,6 +89,7 @@ import Logo from '../components/logo.vue'
                                 if(res.data.code==1){
                                     //console.log(res.data.uname);
                                     sessionStorage.setItem('uid',res.data.uid);
+                                    sessionStorage.setItem('phone',res.data.phone);
                                     this.$router.push('index?id='+this.sid)
                                 }else{
                                     this.alert=true;
@@ -134,7 +135,7 @@ import Logo from '../components/logo.vue'
             this.hidden();
         },
         created() {
-            console.log(sessionStorage.uid)
+            console.log(sessionStorage.uname,sessionStorage.uid)
         },
     }
 </script>

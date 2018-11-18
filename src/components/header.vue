@@ -8,8 +8,8 @@
             <div class="rightArea">
                 <form action="">
                     <div class="search">
-                        <input type="text" placeholder="请输入搜索内容">
-                        <router-link to="#"><img src='@/assets/header/icon_search.png' alt=""></router-link>
+                        <input type="text" placeholder="请输入搜索内容" v-model="search" @keyup.enter="getSearch" />
+                        <a href="#"><img src='@/assets/header/icon_search.png' alt="" @click.stop.prevent="getSearch"></a>
                     </div>
                 </form>
                 <div class="associatives"></div>
@@ -250,6 +250,71 @@
         </div>
     </div>
 </template>
+<script>
+//引入头部的header文件
+import topHeader from './topHeader.vue'
+    export default{
+        data(){
+            return {
+                info1:'',
+                info2:'',
+                info3:'',
+                info4:'',
+                info5:'',
+                info6:'',
+                item:'',
+                istopHeader:true,
+                search:'',
+            }
+        },
+        components:{
+            topHeader
+        },
+        mounted() {
+            this.axios.get('http://localhost:3000/products').then(res=>{
+                //console.log(res.data)
+                //console.log(JSON.stringify(res.data))
+                this.info1=res.data.slice(0,6);
+                this.info2=res.data.slice(6,12);
+                this.info3=res.data.slice(12,16);
+                this.info4=res.data.slice(16,21);
+                this.info5=res.data.slice(21,25);
+                this.info6=res.data.slice(26);
+            });
+        },
+        methods:{
+            /*getSearch(){
+                let search=this.search;
+                console.log(search)
+                this.axios.get('http://localhost:3000/products/search?search='+search).then(res=>{
+                    this.q=res.data;
+                })
+            }*/
+            getSearch(){
+                let search=this.search;
+                sessionStorage.setItem('search',search);
+                console.log()
+                let a=sessionStorage.search;
+                this.$router.push({
+                    name:'bb',
+                    params:{a}
+                    })
+            }
+        },
+        created() {
+            /*this.search=sessionStorage.search;
+            console.log(this.$route.path)
+            if(sessionStorage.search == undefined){
+                this.search=''
+            }else if(this.$route.path=='/'){
+                this.search=''
+            }else{
+                this.search=sessionStorage.search
+            }*/
+        },
+    }
+</script>
+
 <style scoped>
 a{
     font-size: 12px;
@@ -678,36 +743,3 @@ a:hover{
 
 </style>
 
-<script>
-//引入头部的header文件
-import topHeader from './topHeader.vue'
-    export default{
-        data(){
-            return {
-                info1:'',
-                info2:'',
-                info3:'',
-                info4:'',
-                info5:'',
-                info6:'',
-                item:'',
-                istopHeader:true,
-            }
-        },
-        components:{
-            topHeader
-        },
-        mounted() {
-            this.axios.get('http://localhost:3000/products').then(res=>{
-                //console.log(res.data)
-                //console.log(JSON.stringify(res.data))
-                this.info1=res.data.slice(0,6);
-                this.info2=res.data.slice(6,12);
-                this.info3=res.data.slice(12,16);
-                this.info4=res.data.slice(16,21);
-                this.info5=res.data.slice(21,25);
-                this.info6=res.data.slice(26);
-            });
-        },
-    }
-</script>

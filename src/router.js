@@ -13,11 +13,11 @@ import Register from './views/register.vue'
 import Index from './views/index.vue'
 
 
+
 //测试专用引入
 import details from './views/details.vue'
-import bb from './components/tipsLogin.vue'
 import cart from './views/cart.vue'
-
+import bb from './views/select.vue'
 
 
 //引入轮播图

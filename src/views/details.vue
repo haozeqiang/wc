@@ -201,20 +201,21 @@
             </div>
             <div class="right productMenu mb20">
                 <div class="main-category-view psr">
+                    <!--将来需要判断显示隐藏-->
                     <div class="product-detail-menu-box psa">
                         <div class="psr m0a w935">
                             <ul>
-                                <li class="detail on">
-                                    <router-link to="" class="current">商品详情</router-link>
+                                <li v-for="(item,i) in siC" :key="i" class="detail" :class="{on:ssss==i}">
+                                    <a href="#" class="current" @click.prevent="s(i)">{{item}}</a>
                                 </li>
-                                <li class="etc"><router-link role="tab" to="#">购物须知</router-link></li>
-                                <li class="etc"><router-link role="tab" to="#">全部评论</router-link></li>
-                                <li class="etc"><router-link role="tab" to="#">标准尺码对照表</router-link></li>
+                                <!-- <li class="etc" :class="{on:index==siC}"><a href="#" role="tab" @click.prevent="g">购物须知</a></li>
+                                <li class="etc" :class="{on:index==siC}"><a href="#" role="tab" @click.prevent="p">全部评论</a></li>
+                                <li class="etc" :class="{on:index==siC}"><a href="#" role="tab" @click.prevent="c">标准尺码对照表</a></li> -->
                             </ul>
                         </div>
                     </div>
                     <div class="product-detail-box clearfloat">
-                        <div class="tab-pane fade in active">
+                        <div class="tab-pane fade in active" v-show="ssss==0?true:false">
                             <div class="detail-size-box">
                                 <div id="productAdditionalData">
                                     <div>
@@ -250,62 +251,73 @@
                                         '{{ppjs}}'<br>
                                     </div>
                                 </div>
-                                <div class="detail-tit"><span>累计评论</span></div>
                             </div>
-                            <div id="productsizechart" class="tab-pane fade"><img src=""/></div>
-                            <div id="reviewsWrapper">
-                                <div class="review">
-                                    <div id="productReviewForm" class="review_from">
-                                        <p class="cont clearfloat"><textarea placeholder="写评论" name="review"></textarea></p>
-                                        <div class="clearfloat sendComment">
-                                            <div class="left" style="position: relative">
-                                                <a class="add ladda-button" style="position: relative; z-index: 1;">添加图片</a>
-                                                <ul class="add-img clearfloat"></ul>
-                                                <div class="moxie-shim moxie-shim-html5" style="position: absolute;top: 18px;left: 0px;width: 500px;height: 38px;overflow: hidden;z-index: 2;">
-                                                    <label class="file-uploads file-uploads-html5" style="font-size: 999px; opacity: 0; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; cursor: pointer;">
-                                                        <input type="file" name="image" id="image" multiple="multiple">
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="submit_btn right">
-                                                <input type="submit" value="发送">
+                        </div>
+                        <!--商品详情的隐藏显示-->
+                        <!--购物须知-->
+                        <div class="gwxz" v-show="ssss==1?true:false">
+                            <div class="detail-policy">
+                                <p>
+                                    <img src="https://img01.wconceptimg.cn/media/wysiwyg/xuzhi/gouwuxuzhi.jpg" alt="" />
+                                </p>
+                            </div>
+                        </div>
+                        <div class="cm" v-show="ssss==3?true:false">
+                            <img src="https://img01.wconceptimg.cn/skin/frontend/wcc/default/images/homemay/sizechart.jpg" alt="" />
+                        </div>
+                        <div id="reviewsWrapper" v-show="ssss==0||3||2?true:false">
+                            <div class="detail-tit"><span>累计评论</span></div>
+                            <div class="review">
+                                <div id="productReviewForm" class="review_from">
+                                    <p class="cont clearfloat"><textarea placeholder="写评论" name="review"></textarea></p>
+                                    <div class="clearfloat sendComment">
+                                        <div class="left" style="position: relative">
+                                            <a class="add ladda-button" style="position: relative; z-index: 1;">添加图片</a>
+                                            <ul class="add-img clearfloat"></ul>
+                                            <div class="moxie-shim moxie-shim-html5" style="position: absolute;top: 18px;left: 0px;width: 500px;height: 38px;overflow: hidden;z-index: 2;">
+                                                <label class="file-uploads file-uploads-html5" style="font-size: 999px; opacity: 0; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; cursor: pointer;">
+                                                    <input type="file" name="image" id="image" multiple="multiple">
+                                                </label>
                                             </div>
                                         </div>
+                                        <div class="submit_btn right">
+                                            <input type="submit" value="发送">
+                                        </div>
                                     </div>
-                                    <div id="productReviewBox" class="review_list">
-                                        <div class="item" v-for="item in sppl" :key="item.plid" v-show="spplOf">
-                                            <div class="item_content">
-                                                <div class="item_header">
-                                                    <span class="phone">{{item.uname}}</span>
-                                                    <span class="time">{{item.time}}</span>
-                                                </div>
-                                                <div class="item_content breakWord pr20">{{item.neir}}</div>
-                                                <div class="row file clearfloat">
-                                                    <div class="left mr20 col-xs-4 col-sm-3 col-md-2 col-lg-1">
-                                                        <div class="review-image-placeholder fix-ratio-100-100">
-                                                            <img src="https://img01.wconceptimg.cn/media/review/495825/file0_4.jpg!/fw/120" class="fix-ratio-content">
-                                                        </div>
+                                </div>
+                                <div id="productReviewBox" class="review_list">
+                                    <div class="item" v-for="item in sppl" :key="item.plid" v-show="spplOf">
+                                        <div class="item_content">
+                                            <div class="item_header">
+                                                <span class="phone">{{item.uname}}</span>
+                                                <span class="time">{{item.time}}</span>
+                                            </div>
+                                            <div class="item_content breakWord pr20">{{item.neir}}</div>
+                                            <div class="row file clearfloat">
+                                                <div class="left mr20 col-xs-4 col-sm-3 col-md-2 col-lg-1">
+                                                    <div class="review-image-placeholder fix-ratio-100-100">
+                                                        <img src="https://img01.wconceptimg.cn/media/review/495825/file0_4.jpg!/fw/120" class="fix-ratio-content">
                                                     </div>
                                                 </div>
-                                                <div class="item_replay"></div>
-                                                <div class="replay_list">
-                                                    <div class="secondReplay btd9">
-                                                        <p class="replay-name">
-                                                            <span class="uColor">{{item.ouname}}</span> 
-                                                            <span>：</span> 
-                                                            <span class="txt">{{item.oneir}}</span>
-                                                        </p>
-                                                        <div class="replay-footer">
-                                                            <span class="time">{{item.otime}}</span>
-                                                            <div class="btn-replay">
-                                                                <div class="item_replay">回复</div>
-                                                            </div>
+                                            </div>
+                                            <div class="item_replay"></div>
+                                            <div class="replay_list">
+                                                <div class="secondReplay btd9">
+                                                    <p class="replay-name">
+                                                        <span class="uColor">{{item.ouname}}</span> 
+                                                        <span>：</span> 
+                                                        <span class="txt">{{item.oneir}}</span>
+                                                    </p>
+                                                    <div class="replay-footer">
+                                                        <span class="time">{{item.otime}}</span>
+                                                        <div class="btn-replay">
+                                                            <div class="item_replay">回复</div>
                                                         </div>
-                                                        <div class="item_replay_comment">
-                                                            <div class="reply_form">
-                                                                <textarea id="replay-comment"></textarea> 
-                                                                <input type="submit" value="评论" class="replay_submit">
-                                                            </div>
+                                                    </div>
+                                                    <div class="item_replay_comment">
+                                                        <div class="reply_form">
+                                                            <textarea id="replay-comment"></textarea> 
+                                                            <input type="submit" value="评论" class="replay_submit">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -358,12 +370,14 @@ import Header from '../components/header.vue'
                 sptj:'',
                 sppl:'',
                 spplOf:false,
+                siC:['商品详情','购物须知','全部评论','标准尺码对照表'],
+                ssss:0,
             }
         },
         methods:{
             getinfo(){
                 let nid=this.$route.query.nid;
-                console.log(nid)
+                //console.log(nid)
                 this.axios.get('http://localhost:3000/products/getinfo?nid='+nid).then(res=>{
                     this.nid=res.data[0].nid;
                     this.color=res.data[0].color.split(',');
@@ -381,7 +395,7 @@ import Header from '../components/header.vue'
                     this.size=res.data[0].size.split(',');
                     this.spec=res.data[0].spec;
                     this.title=res.data[0].title;
-                    console.log(this.parameters)
+                    console.log(res.data);
                 });
                 this.axios.get('http://localhost:3000/products/getpic?nid='+nid).then(res=>{
                     this.fl=res.data[0].fl.split(',');
@@ -392,7 +406,7 @@ import Header from '../components/header.vue'
                 });
                 this.axios.get('http://localhost:3000/products/sptj?nid='+nid).then(res=>{
                     this.sptj=res.data;
-                    console.log(res.data)
+                    //console.log(res.data)
                 });
                 this.axios.get('http://localhost:3000/products/sppl?nid='+nid).then(res=>{
                     if(res.data.length>0){
@@ -407,12 +421,12 @@ import Header from '../components/header.vue'
                 if(this.j<2){
                     //this.j--;
                     this.$refs.yd.style.left=(-87*this.j)+'px';
-                    console.log('!!!!'+this.j)
+                    //console.log('!!!!'+this.j)
                     return false;
                 }else{
                     this.j--;
                     this.$refs.yd.style.left= (-87*this.j)+'px';
-                    console.log(this.j)
+                    //console.log(this.j)
                     return false;
                 }
             },
@@ -425,26 +439,31 @@ import Header from '../components/header.vue'
                     this.j++;
                     this.$refs.yd.style.left=(-87*this.j)+'px';
                     
-                    console.log('!!!!'+this.j)
+                    //console.log('!!!!'+this.j)
                     return false;
                 }else{
                     this.$refs.yd.style.left= (-87*this.j)+'px';
-                    console.log(this.j)
+                    //console.log(this.j)
                     return false;
                 }
                 
             },
+            s(i){
+                this.ssss=i;
+            },
+            
         },
         mounted(){
             this.getinfo();
         },
         created() {
-            let sid=sessionStorage.uname;
+            /*let sid=sessionStorage.uname;
             if(this.sid==''||this.sid==undefined){
-            alert('请登陆')
+            //
             //this.$router.push('/login')
             }
-            console.log(this.$route)
+            console.log(this.$route)*/
+            sessionStorage.setItem=this.$route.query.nid
         },
         components:{
             Header,Footer
@@ -1225,9 +1244,7 @@ import Header from '../components/header.vue'
     margin: 10px auto;
     cursor: pointer;
 }
-#productsizechart{
-    display:none;
-}
+
 .review {
     background: #f8f8f8;
     width: 750px;

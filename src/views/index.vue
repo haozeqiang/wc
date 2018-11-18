@@ -249,7 +249,7 @@ export default {
         this.getadinfo();
     },
     created() {
-        //console.log(this.$route)
+        //console.log(sessionStorage.search)
     },
 }
 </script>
